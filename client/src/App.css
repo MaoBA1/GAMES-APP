@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+
+.forget-password-button {
+  margin-top: 10px;
+  background-color: #E56522;
+  border: 0px;
+  border-radius: 6px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #ffffffff;
+}
+
+.forget-password-button:hover {
+  background-color: #e65a0e;
+}

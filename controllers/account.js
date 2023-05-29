@@ -141,7 +141,31 @@ router.put('/verifyAccount', async(req,res) => {
     })
 })
 
+router.put('/regenrateNewVerificationCode', async(req, res) => {
+    const { email } = req.body;
+    Account.findOne({ email: email })
+    .then(account => {
+        if(account) {
+            account.verficationCode = generateRandomIntegerInRange(1000, 9999);
+            return account.save()
+            .then(account_updated => {
+                return res.status(200).json({
+                    message: account_updated 
+                })
+            })
+        } else {
+            return res.status(401).json({
+                message: "Account not Exist..."
+            })
+        }
+    })
+    .catch(error => {
+        return res.status(401).json({
+            message: error.message
+        })
+    })
 
+})
 
 function generateRandomIntegerInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

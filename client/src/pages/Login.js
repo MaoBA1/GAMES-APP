@@ -16,6 +16,9 @@ const Login = props => {
     const [password, setPassword] = useState("");
     const [mobile, setMobile] = useState("");
     const [code, setCode] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [ verifyNewPassword, setVerifyNewSound ] = useState("");
+    const [ isForgetPasswordPermit, setIsForgetPasswordPermit ] = useState(true);
 
 
     const navigate = useNavigate();
@@ -23,11 +26,12 @@ const Login = props => {
 
     useEffect(() => {
         if(localStorage.getItem("token")){
+            // localStorage.removeItem("token")
             navigate('/dashboard')
         } else {
             navigate('/')
         }
-    },[]);
+    },[navigate]);
 
 
 
@@ -36,8 +40,8 @@ const Login = props => {
     //registerView //verifyView //recoverView
 
 
-      const createNewAccount = async() => {
-        if(firstName !== "" && lastName !== "" && email !== "" && password !== ""){
+    const createNewAccount = async() => {
+    if(firstName !== "" && lastName !== "" && email !== "" && password !== ""){
         const user = {
             firstName: firstName,
             lastName: lastName,
@@ -47,6 +51,7 @@ const Login = props => {
         }
         axios.post(baseURL + '/account/createAccount',{user})
         .then(results => {
+            console.table(results);
             toast.success(results.data.message.verficationCode);
             localStorage.setItem('vdata', JSON.stringify(results.data.message.email))
             setAuthView("verifyView");
@@ -57,52 +62,67 @@ const Login = props => {
         } else {
             toast.error("All inputs are required!!!");
         }
-        }
+    }
 
-      const login = async() => {
-        if(email !== "" && password !== ""){
-        const user = {
-            email: email,
-            password: password
+    const login = async() => {
+    if(email !== "" && password !== ""){
+    const user = {
+        email: email,
+        password: password
+    }
+    axios.post(baseURL + '/account/login',{user})
+    .then(results => {
+        //toast.success(results.data.message);
+        console.log(results);
+        localStorage.setItem("token", JSON.stringify(results.data.message));
+        navigate('/dashboard');
+    })
+    .catch(error => {
+        toast.error(error.response.data.message);
+    })
+    } else {
+    toast.error("All inputs are required!!!");
+    }
+    }
+
+    const verifyMyCode = async() => {
+
+        if(code !== ""){
+            const remail = localStorage.getItem("vdata");
+            const verify = {
+                email: JSON.parse(remail),
+                verficationCode: code
+            }
+
+
+            axios.put(baseURL + '/account/verifyAccount',{verify})
+            .then(results => {
+                toast.success(`Welcome ${results.data.message.firstName}`)
+                setAuthView("loginView")
+                setEmail(JSON.parse(remail));
+            })
+            .catch(error => {
+                toast.error(error.response.data.message);
+            })
+
+
+        } else {
+            toast.error("You didnt type any code");
         }
-        axios.post(baseURL + '/account/login',{user})
+    }
+
+    const regenrateVerificationCode = async() => {
+        axios.put(baseURL + '/account/regenrateNewVerificationCode',{ email })
         .then(results => {
-            //toast.success(results.data.message);
-            console.log(results);
-            localStorage.setItem("token", JSON.stringify(results.data.message));
-            navigate('/dashboard');
+            console.table(results);
+            toast.success(results.data.message.verficationCode);
         })
         .catch(error => {
             toast.error(error.response.data.message);
         })
-        } else {
-        toast.error("All inputs are required!!!");
-        }
-        }
+    }
 
-        const verifyMyCode = async() => {
-
-            if(code !== ""){
-                const remail = localStorage.getItem("vdata");
-                const verify = {
-                    email: JSON.parse(remail),
-                    verficationCode: code
-                }
-
-
-                axios.put(baseURL + '/account/verifyAccount',{verify})
-                .then(results => {
-                    toast.success(`Welcome ${results.data.message.firstName}`)
-                })
-                .catch(error => {
-                    toast.error(error.response.data.message);
-                })
-
-
-            } else {
-                toast.error("You didnt type any code");
-            }
-        }
+        
 
     return(
         
@@ -138,8 +158,10 @@ const Login = props => {
                                     </Form.Group>
 
                                     <Button variant="primary" style={{width:'100%', marginTop:15}} onClick={login}>Sign In</Button>
+                                    <button className="forget-password-button" onClick={() => setAuthView("forgetPassword")}>Forget Password?</button>
                                 </Form>
                                 <Button style={{marginTop:12}} variant="light" onClick={() => {setAuthView("registerView")}}>Don't have an account? Signup Now!</Button>
+                                
                             </>
                         )
                         : 
@@ -189,6 +211,7 @@ const Login = props => {
                                         <Form.Control type="text" value={code} onChange={(e) => {setCode(e.target.value)}} />
                                     </Form.Group>
                                     <Button variant="primary" style={{width:'100%', marginTop:15}} onClick={verifyMyCode}>Verify</Button>
+                                    <Button variant="warning" style={{width:'100%', marginTop:15}} onClick={regenrateVerificationCode}>send new code</Button>
                                 </Form>
                                 <Button style={{marginTop:12}} variant="light" onClick={() => {setAuthView("loginView")}}>Back to login</Button>
                         </>)
@@ -196,6 +219,31 @@ const Login = props => {
                         (
                         <>
                             <h3 style={{marginTop:15}}>Forget Password</h3>
+                                <Form>
+                                   {
+                                    isForgetPasswordPermit ?
+                                    (
+                                        <Form.Group>
+                                            <Form.Group>
+                                            <Form.Label>Please Choos New Password</Form.Label>
+                                                <Form.Control type="text" value={newPassword} placeholder="Type New Password..." onChange={(e) => {setNewPassword(e.target.value)}} />
+                                                <Form.Control type="text" value={verifyNewPassword} placeholder="ReType New Password..." onChange={(e) => {setNewPassword(e.target.value)}} />
+                                            </Form.Group>
+                                            <Button variant="primary" style={{width:'100%', marginTop:15}} onClick={verifyMyCode}>Reset</Button>
+                                        </Form.Group>
+                                    )
+                                    :
+                                    (
+                                        <>
+                                            <Form.Group>
+                                                <Form.Label>Please Enter Your Email</Form.Label>
+                                                <Form.Control type="text" value={email} placeholder="example@email.com" onChange={(e) => {setEmail(e.target.value)}} />
+                                            </Form.Group>
+                                            <Button variant="primary" style={{width:'100%', marginTop:15}} onClick={verifyMyCode}>Reset</Button>
+                                        </>
+                                    )
+                                   }
+                                </Form>
                         </>)
                     }
 

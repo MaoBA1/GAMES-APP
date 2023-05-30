@@ -13,8 +13,6 @@ import axios from 'axios';
 
 
 const Dashboard = props => {
-
-
     const [deviceName, setdeviceName] = useState("");
     const [price, setprice] = useState(0);
     const [reviews, setreviews] = useState([]);

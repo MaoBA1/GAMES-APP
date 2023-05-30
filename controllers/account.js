@@ -193,9 +193,13 @@ router.put("/changePassword", async(req, res) => {
     Account.findOne({ email: email })
     .then(async account => {
         const hash = await bcryptjs.hash(password, 10);
+        console.log(account);
         account.password = hash;
-        return res.status(200).json({
-            succses: true
+        return account.save()
+        .then(() => {
+            return res.status(200).json({
+                succses: true
+            })           
         })
     })
     .catch(() => {

@@ -52,3 +52,6 @@
 .forget-password-button:hover {
   background-color: #e65a0e;
 }
+.forget-password-control{
+  margin: 10px;
+}

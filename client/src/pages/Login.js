@@ -18,7 +18,7 @@ const Login = props => {
     const [code, setCode] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [ verifyNewPassword, setVerifyNewSound ] = useState("");
-    const [ isForgetPasswordPermit, setIsForgetPasswordPermit ] = useState(true);
+    const [ isForgetPasswordPermit, setIsForgetPasswordPermit ] = useState(false);
 
 
     const navigate = useNavigate();
@@ -123,6 +123,52 @@ const Login = props => {
     }
 
         
+    const requestToChangePassword = () => {
+        if(email === "") return toast.error("Email is required!");
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailPattern.test(email)) return toast.error("Please provide valide email address!");
+        axios.put(baseURL + '/account/requestToChangePassword',{ email })
+        .then(results => {
+            console.table(results);
+            if(results.data.permission){
+                setIsForgetPasswordPermit(results.data.permission);
+            } else {
+                toast.error("Email not Exist!");
+            }
+        })
+        .catch(error => {
+            toast.error(error.response.data.message);
+        })
+    }
+
+    const changePassword = () => {
+        if(newPassword.length < 8) {
+            toast.error("Password must be at lest 8 charcters!");
+            setNewPassword("");
+            return setVerifyNewSound("");
+        } else if(newPassword !== verifyNewPassword) {
+            toast.error("verify password error");
+            setNewPassword("");
+            return setVerifyNewSound("");
+        }
+        axios.put(baseURL + '/account/changePassword',{ email, password: newPassword })
+        .then(results => {
+            console.table(results);
+            if(results.data.succses){
+                toast.success("Password was changed succsesfuly");
+                setPassword(newPassword);
+                setNewPassword("");
+                setVerifyNewSound("");
+                setAuthView("loginView");
+                setIsForgetPasswordPermit(false);
+            } else {
+                toast.error("Something went wrong...");
+            }
+        })
+        .catch(error => {
+            toast.error(error.response.data.message);
+        })
+    }
 
     return(
         
@@ -226,10 +272,10 @@ const Login = props => {
                                         <Form.Group>
                                             <Form.Group>
                                             <Form.Label>Please Choos New Password</Form.Label>
-                                                <Form.Control type="text" value={newPassword} placeholder="Type New Password..." onChange={(e) => {setNewPassword(e.target.value)}} />
-                                                <Form.Control type="text" value={verifyNewPassword} placeholder="ReType New Password..." onChange={(e) => {setNewPassword(e.target.value)}} />
+                                                <Form.Control className="forget-password-control" type="password" value={newPassword} placeholder="Type New Password..." onChange={(e) => {setNewPassword(e.target.value)}} />
+                                                <Form.Control className="forget-password-control" type="password" value={verifyNewPassword} placeholder="ReType New Password..." onChange={(e) => {setVerifyNewSound(e.target.value)}} />
                                             </Form.Group>
-                                            <Button variant="primary" style={{width:'100%', marginTop:15}} onClick={verifyMyCode}>Reset</Button>
+                                            <Button variant="primary" style={{width:'100%', marginTop:15}} onClick={changePassword}>change password</Button>
                                         </Form.Group>
                                     )
                                     :
@@ -239,7 +285,7 @@ const Login = props => {
                                                 <Form.Label>Please Enter Your Email</Form.Label>
                                                 <Form.Control type="text" value={email} placeholder="example@email.com" onChange={(e) => {setEmail(e.target.value)}} />
                                             </Form.Group>
-                                            <Button variant="primary" style={{width:'100%', marginTop:15}} onClick={verifyMyCode}>Reset</Button>
+                                            <Button variant="primary" style={{width:'100%', marginTop:15}} onClick={requestToChangePassword}>Reset</Button>
                                         </>
                                     )
                                    }

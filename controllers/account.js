@@ -167,6 +167,45 @@ router.put('/regenrateNewVerificationCode', async(req, res) => {
 
 })
 
+router.put("/requestToChangePassword", async(req, res) => {
+    const { email } = req.body;
+    Account.findOne({ email: email })
+    .then(account => {
+        if(account) {
+            return res.status(200).json({
+                permission: true
+            })
+        } else {
+            return res.status(401).json({
+                permission: false
+            })
+        }
+    })
+    .catch(error => {
+        return res.status(500).json({
+            error: error.message
+        })
+    })
+})
+
+router.put("/changePassword", async(req, res) => {
+    const { email, password } = req.body;
+    Account.findOne({ email: email })
+    .then(async account => {
+        const hash = await bcryptjs.hash(password, 10);
+        account.password = hash;
+        return res.status(200).json({
+            succses: true
+        })
+    })
+    .catch(() => {
+        return res.status(500).json({
+            succses: false
+        })
+    })
+
+})
+
 function generateRandomIntegerInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }

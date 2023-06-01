@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Button, Container, Row, Col, Form, Card } from "react-bootstrap";
+import { Button, Container, Row, Col, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,7 +33,7 @@ const Login = props => {
         }
 
         if (window.performance) {
-            if (performance.navigation.type == 1) {
+            if (performance.navigation.type === 1) {
               return setAuthView("loginView");
             }
         } 
@@ -135,12 +135,7 @@ const Login = props => {
         if(!emailPattern.test(email)) return toast.error("Please provide valide email address!");
         axios.put(baseURL + '/account/requestToChangePassword',{ email })
         .then(results => {
-            console.table(results);
-            if(results.data.permission){
-                setIsForgetPasswordPermit(results.data.permission);
-            } else {
-                toast.error("Email not Exist!");
-            }
+            results.data.permission ? setIsForgetPasswordPermit(results.data.permission) : toast.error("Email not Exist!");
         })
         .catch(error => {
             toast.error(error.response.data.message);
@@ -190,7 +185,11 @@ const Login = props => {
                     backgroundColor:'#ffffff', borderRadius:20}}>
 
 
-                    <img src="../../logo.png" style={{width:200}} />
+                    <img 
+                        src="../../logo.png"
+                        style={{width:200}} 
+                        alt="logo"
+                    />
 
 
                     {

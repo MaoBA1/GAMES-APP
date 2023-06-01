@@ -1,0 +1,20 @@
+.image-Placeholder {
+    border: 3px dotted gray;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.image-placeholder-background {
+    width: 100%;
+    padding: 80px;
+    display: flex;
+    background-color: gray;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}

@@ -176,7 +176,7 @@ router.put("/requestToChangePassword", async(req, res) => {
                 permission: true
             })
         } else {
-            return res.status(401).json({
+            return res.status(200).json({
                 permission: false
             })
         }

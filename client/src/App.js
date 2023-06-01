@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Game from "./pages/Game";
 import Cart from "./pages/Cart";
+import AddGame from "./pages/AddGame";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login/>} />
           <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/addProduct" element={<AddGame/>} />
           <Route path="/review-details" element={<Game/>} />
           <Route path="/cart" element={<Cart/>} />
         </Routes>

@@ -31,6 +31,12 @@ const Login = props => {
         } else {
             navigate('/')
         }
+
+        if (window.performance) {
+            if (performance.navigation.type == 1) {
+              return setAuthView("loginView");
+            }
+        } 
     },[navigate]);
 
 

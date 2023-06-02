@@ -26,7 +26,7 @@ const Login = props => {
 
     useEffect(() => {
         if(localStorage.getItem("token")){
-            // localStorage.removeItem("token")
+            localStorage.removeItem("token")
             navigate('/dashboard')
         } else {
             navigate('/')

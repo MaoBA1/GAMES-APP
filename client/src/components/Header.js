@@ -10,29 +10,30 @@ const Header = ({ isItDashBoard }) => {
     const [ dropdownPriceRange, setDropDwonPriceRange ] = useState("Choos Price Range");
     return(
         <>
-        <Navbar variant="light" bg="dark" expand="lg">
+        <Navbar variant="dark" bg="light" expand="lg">
             <Container fluid>
                 <Navbar.Collapse id="navbar-dark-example">
+                    <Navbar.Brand href="/dashboard">
+                        <img src="../../logo.png" style={{width:140}} />
+                    </Navbar.Brand>
                         {
                             !isItDashBoard &&
-                            <Link style={{ textDecoration:"none", color:"#FFFFFF", }}  to="/dashboard" relative="path">
+                            <Link style={{ textDecoration:"none", color: "#EE621A", }}  to="/dashboard" relative="path">
                                 Home
                             </Link>
                         }
                         <div style={{ width:"10px" }} />
-                        <Link style={{ textDecoration:"none", color:"#FFFFFF" }}  to="/addProduct" relative="path">
+                        <Link style={{ textDecoration:"none", color:"#EE621A" }}  to="/addProduct" relative="path">
                             Add New Product
                         </Link>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
+        
         {
             isItDashBoard && 
             <Navbar variant="light" bg="light" expand="lg">
                 <Container fluid>
-                    <Navbar.Brand href="home">
-                        <img src="../../logo.png" style={{width:140}} />
-                    </Navbar.Brand>
                     <Navbar.Collapse id="navbar-dark-example">
                     <Nav style={{
                         width:"100%",

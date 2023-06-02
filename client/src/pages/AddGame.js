@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import './../AddGame.css';
-import { Image, Ratio } from 'react-bootstrap';
+import { Button, Form, Image, InputGroup, Row } from 'react-bootstrap';
 import { IoMdAddCircle } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 
 
@@ -37,10 +38,28 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) =>
     return(
         !isEmpty ? 
         (
+            <div style={{ position:"relative" }}>
             <Image 
                 src={image}
-                style={{ width:"200px", height:"200px", margin:"10px" }}
+                style={{ 
+                    width: image === array[0] ? "320px" : "150px",
+                    height: image === array[0] ? "320px" : "150px",
+                    margin:"10px",
+                    borderRadius:"20px"
+                }}
             />
+            <AiFillCloseCircle
+                style={{ 
+                    position:"absolute",
+                    zIndex:1,
+                    top:25,
+                    right:20
+                }}
+                color='#FFFFFF'
+                size={"25px"}
+                onClick={() => setImage(array.filter(url => url !== image))}
+            />
+            </div>
         )
         :
         (
@@ -50,7 +69,8 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) =>
                 style={{
                     width,
                     height,
-                    margin:"10px"
+                    margin:"10px",
+                    backgroundColor: "#F8F9FA"
                 }}
                 onClick={handelImageSelection}
             >
@@ -82,12 +102,7 @@ function AddGame({ }) {
     return (  
         <>
             <Header/>
-            <h1 style={{
-                margin:"10px",
-                
-            }}>
-                Upload New Game
-            </h1>
+            
             <div className='image-placeholder-background'>
                 {
                     gameImages.length === 0 ?
@@ -105,10 +120,23 @@ function AddGame({ }) {
                         <div style={{
                             display:"flex",
                             flexDirection:"row",
-                            flexWrap:"wrap"
                         }}>
+                                <ImagePlaceHolder 
+                                    setImage={setGameImages}
+                                    image={gameImages[0]}
+                                    index={0}
+                                    array={gameImages}
+                                />
+                            <div style={{
+                                display:"flex",
+                                flexDirection:"row",
+                                flexWrap:"wrap",
+                                width:"600px",
+                                
+                            }}>
                             {
-                                gameImages.map((item, index) => 
+                                
+                                gameImages.slice(1, gameImages.length).map((item, index) => 
                                     <div key={index}>
                                         <ImagePlaceHolder 
                                             setImage={setGameImages}
@@ -120,19 +148,129 @@ function AddGame({ }) {
                                 )
                             }
                             {
-                                gameImages.length < 6 &&
+                                gameImages.length < 7 &&
                                 <ImagePlaceHolder
-                                    width={"200px"}
-                                    height={"200px"}
+                                    width={"150px"}
+                                    height={"150px"}
                                     setImage={setGameImages}
                                     array={gameImages}
                                     isEmpty={true}
                                 />
                             }
+                            </div>
                         </div>
                     )
                 }
                 
+            </div>
+
+            <div style={{
+                display:"flex",
+                flexDirection:"column",
+                alignItems:"center"
+            }}>
+                <Form noValidate>
+                        <Row className="mb-3">
+                            <Form.Group
+                                md="4"
+                                controlId="validationFormik101"
+                                className="position-relative"
+                            >
+                            <Form.Label>First name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="firstName"
+                            />
+                            <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group
+                                md="4"
+                                controlId="validationFormik102"
+                                className="position-relative"
+                            >
+                            <Form.Label>Last name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="lastName"
+                            />
+
+                            <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group md="4" controlId="validationFormikUsername2">
+                            <Form.Label>Username</Form.Label>
+                            <InputGroup hasValidation>
+                                <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Username"
+                                    aria-describedby="inputGroupPrepend"
+                                />
+                                <Form.Control.Feedback type="invalid" tooltip>
+                                
+                                </Form.Control.Feedback>
+                            </InputGroup>
+                            </Form.Group>
+                        </Row>
+                        <Row className="mb-3">
+                            <Form.Group
+                                md="6"
+                                controlId="validationFormik103"
+                                className="position-relative"
+                            >
+                            <Form.Label>City</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="City"
+                            />
+
+                            <Form.Control.Feedback type="invalid" tooltip>
+                                
+                            </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group
+                                md="3"
+                                controlId="validationFormik104"
+                                className="position-relative"
+                            >
+                            <Form.Label>State</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="State"
+                            />
+                            <Form.Control.Feedback type="invalid" tooltip>
+                                
+                            </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group
+                                md="3"
+                                className="position-relative"
+                            >
+                            <Form.Label>Zip</Form.Label>
+                            <Form.Control
+                                type="text"
+                            />
+
+                            <Form.Control.Feedback type="invalid" tooltip>
+                                
+                            </Form.Control.Feedback>
+                            </Form.Group>
+                        </Row>
+                        <Form.Group className="position-relative mb-3">
+                            <Form.Label>File</Form.Label>
+                            <Form.Control
+                                 type="file"
+                            />
+                            <Form.Control.Feedback type="invalid" tooltip>
+                            
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className="position-relative mb-3">
+                            <Form.Check
+                                required
+                                feedbackTooltip
+                            />
+                        </Form.Group>
+                    </Form>
             </div>
         </>
     );

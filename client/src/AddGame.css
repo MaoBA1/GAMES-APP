@@ -12,9 +12,12 @@
     width: 100%;
     padding: 80px;
     display: flex;
-    background-color: gray;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+.secondaries-images {
+    border: 1px solid;
 }

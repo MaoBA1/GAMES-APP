@@ -10,7 +10,7 @@
 
 .image-placeholder-background {
     width: 100%;
-    padding: 80px;
+    padding: 50px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -21,3 +21,4 @@
 .secondaries-images {
     border: 1px solid;
 }
+

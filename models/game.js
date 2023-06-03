@@ -8,7 +8,7 @@ const gameSchema = new Schema({
     gamePrice: Number,
     isAvailable: {type:Boolean, default:true},
     gameDescription: String,
-    gameImage: String
+    gameImage: Array
 })
 
 export default mongoose.model('Game', gameSchema);

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import './../AddGame.css';
-import { Button, Form, Image, InputGroup, Row } from 'react-bootstrap';
+import { Button, Col, Form, Image, Row } from 'react-bootstrap';
 import { IoMdAddCircle } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-
+const baseURL = "http://localhost:3001/api";
 
 const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) => {
 
@@ -95,12 +95,40 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) =>
 }
 
 
+
 function AddGame({ }) {
     const [ gameImages, setGameImages ] = useState([]);
+    const [ gameName, setGameName ] = useState("");
+    const [ gameGenre, setGameGenre ] = useState("");
+    const [ gamePrice, setGamePrice ] = useState("$");
+    const [ gameDescription, setGameDescription ] = useState("");
     
-     
+
+    const publishGame = () => {
+        if(gamePrice === "$") {
+            return;
+        }
+        if(gameImages.length === 0) {
+            return toast.error("You have to provide atleast one image to publish your game")
+        }
+        const game = {
+            gameName,
+            gamePrice,
+            gameDescription,
+            gameImage: gameImages
+        }
+
+        axios.post(baseURL + "/game/createNewGame", { game })
+        .then(results => {
+
+        })
+        .catch(error => {
+            
+        })
+    }
+
     return (  
-        <>
+        <div>
             <Header/>
             
             <div className='image-placeholder-background'>
@@ -169,110 +197,83 @@ function AddGame({ }) {
                 flexDirection:"column",
                 alignItems:"center"
             }}>
-                <Form noValidate>
-                        <Row className="mb-3">
-                            <Form.Group
-                                md="4"
-                                controlId="validationFormik101"
-                                className="position-relative"
-                            >
-                            <Form.Label>First name</Form.Label>
+                <Form style={{ width:"1000px" }}>
+                    <Row>
+                        <Form.Group>
+                            <Form.Label style={{ color:'#EE621A' }}>
+                                Game name
+                            </Form.Label>
                             <Form.Control
                                 type="text"
-                                name="firstName"
-                            />
-                            <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group
-                                md="4"
-                                controlId="validationFormik102"
-                                className="position-relative"
-                            >
-                            <Form.Label>Last name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="lastName"
-                            />
-
-                            <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group md="4" controlId="validationFormikUsername2">
-                            <Form.Label>Username</Form.Label>
-                            <InputGroup hasValidation>
-                                <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Username"
-                                    aria-describedby="inputGroupPrepend"
-                                />
-                                <Form.Control.Feedback type="invalid" tooltip>
-                                
-                                </Form.Control.Feedback>
-                            </InputGroup>
-                            </Form.Group>
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Group
-                                md="6"
-                                controlId="validationFormik103"
-                                className="position-relative"
-                            >
-                            <Form.Label>City</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="City"
-                            />
-
-                            <Form.Control.Feedback type="invalid" tooltip>
-                                
-                            </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group
-                                md="3"
-                                controlId="validationFormik104"
-                                className="position-relative"
-                            >
-                            <Form.Label>State</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="State"
-                            />
-                            <Form.Control.Feedback type="invalid" tooltip>
-                                
-                            </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group
-                                md="3"
-                                className="position-relative"
-                            >
-                            <Form.Label>Zip</Form.Label>
-                            <Form.Control
-                                type="text"
-                            />
-
-                            <Form.Control.Feedback type="invalid" tooltip>
-                                
-                            </Form.Control.Feedback>
-                            </Form.Group>
-                        </Row>
-                        <Form.Group className="position-relative mb-3">
-                            <Form.Label>File</Form.Label>
-                            <Form.Control
-                                 type="file"
-                            />
-                            <Form.Control.Feedback type="invalid" tooltip>
-                            
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="position-relative mb-3">
-                            <Form.Check
+                                name="gameName"
+                                size='lg'
                                 required
-                                feedbackTooltip
+                                value={gameName}
+                                onChange={(e) => setGameName(e.target.value)}
                             />
                         </Form.Group>
-                    </Form>
+                        <Form.Group as={Col}>
+                            <Form.Label style={{ color:'#EE621A' }}>
+                                Game genre
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="gameGenre"
+                                required
+                                value={gameGenre}
+                                onChange={(e) => setGameGenre(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                        <Form.Label style={{ color:'#EE621A' }}>
+                            Game price
+                        </Form.Label>
+                            <Form.Control
+                                type='text'
+                                name='gamePrice'
+                                required
+                                value={gamePrice === "" ? "$" : gamePrice}
+                                onChange={(e) => setGamePrice(isNaN(e.target.value.slice(1, e.target.value.length)) ? gamePrice + "" : e.target.value)}
+                            />
+                        </Form.Group>
+                    </Row>
+
+                    <Row>
+                        <Form.Group as={Col}>
+                            <Form.Label style={{ color:'#EE621A' }}>
+                                Game Description
+                            </Form.Label>
+                            <Form.Control
+                                name="gameDescription"
+                                multiple
+                                required
+                                style={{
+                                    height:"150px"
+                                }}
+                                value={gameDescription}
+                                onChange={(e) => setGameDescription(e.target.value)}
+                            />
+                        </Form.Group>
+                    </Row>
+                    <Row 
+                        style={{ 
+                            display:"flex",
+                            flexDirection:"column",
+                            alignItems:"center",
+                            marginTop:"20px"
+                        }}>
+                        <Button 
+                            size='lg'
+                            variant='dark'
+                            type="submit"
+                            style={{ width:"60%" }}
+                        >
+                            Publish It!
+                        </Button>
+                    </Row>
+                </Form>
             </div>
-        </>
+        </div>
     );
 }
 

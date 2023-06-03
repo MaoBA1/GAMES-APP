@@ -6,6 +6,7 @@ import { IoMdAddCircle } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 const baseURL = "http://localhost:3001/api";
 
@@ -97,6 +98,7 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) =>
 
 
 function AddGame({ }) {
+    const navigate = useNavigate();
     const [ gameImages, setGameImages ] = useState([]);
     const [ gameName, setGameName ] = useState("");
     const [ gameGenre, setGameGenre ] = useState("");
@@ -121,10 +123,17 @@ function AddGame({ }) {
 
         axios.post(baseURL + "/game/createNewGame", { game })
         .then(results => {
+            const { status, message } = results.data;
 
+            if(!status) {
+                toast.error(message);
+            } else {
+                toast.success(message);
+                navigate('/dashboard')
+            }
         })
         .catch(error => {
-            
+            console.error(error);
         })
     }
 
@@ -198,7 +207,7 @@ function AddGame({ }) {
                 flexDirection:"column",
                 alignItems:"center"
             }}>
-                <Form style={{ width:"1000px" }}>
+                <Form onSubmit={publishGame} style={{ width:"1000px" }}>
                     <Row>
                         <Form.Group>
                             <Form.Label style={{ color:'#EE621A' }}>
@@ -246,11 +255,10 @@ function AddGame({ }) {
                             </Form.Label>
                             <Form.Control
                                 name="gameDescription"
-                                multiple
+                                multiple={true}
                                 required
-                                style={{
-                                    height:"150px"
-                                }}
+                                as="textarea" 
+                                rows={3}
                                 value={gameDescription}
                                 onChange={(e) => setGameDescription(e.target.value)}
                             />
@@ -267,7 +275,8 @@ function AddGame({ }) {
                             size='lg'
                             variant='dark'
                             type="submit"
-                            style={{ width:"60%" }}
+                            style={{ width:"60%", marginBottom:"20px" }}
+                            onClick={publishGame}
                         >
                             Publish It!
                         </Button>

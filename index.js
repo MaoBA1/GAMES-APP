@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import actions from './actions.js';
 import cors from 'cors';
 import accountController from './controllers/account.js';
+import gameController from './controllers/game.js';
 
 const app = express();
 

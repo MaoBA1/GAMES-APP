@@ -11,9 +11,13 @@ import { NavLink } from 'react-router-dom';
 import { VscChevronRight } from "react-icons/vsc";
 import axios from 'axios';
 
+const baseURL = "http://localhost:3001/api";
 
 const Dashboard = props => {
    
+    useEffect(() => {
+        axios.get(baseURL + "/game")
+    },[])
     return (
         <>
             <Header isItDashBoard={true}/>

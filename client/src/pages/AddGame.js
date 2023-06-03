@@ -115,6 +115,7 @@ function AddGame({ }) {
             gameName,
             gamePrice,
             gameDescription,
+            gameGenre,
             gameImage: gameImages
         }
 

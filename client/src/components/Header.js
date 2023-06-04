@@ -4,10 +4,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 
 
-const Header = ({ isItDashBoard }) => {
-
-    const [ dropDownCategoryTitle, setDropDwonCategoryTitle ] = useState("Choose Category");
-    const [ dropdownPriceRange, setDropDwonPriceRange ] = useState("Choos Price Range");
+const Header = ({ 
+    isItDashBoard,
+    geners,
+    setCategoryFilter,
+    setPriceFilter,
+    priceFilter,
+    categoryiFilter
+}) => {
+    
     return(
         <>
         <Navbar variant="dark" bg="light" expand="lg">
@@ -55,21 +60,27 @@ const Header = ({ isItDashBoard }) => {
                         }}>
                             <NavDropdown
                                 id="nav-dropdown-dark-example"
-                                title={dropDownCategoryTitle}
-                                menuVariant="dark"
+                                title={categoryiFilter}
+                                menuVariant="light"
                                 style={{ border: "1px solid grey" }}
                             >
-                                {/* We need to add some categories */}
+                                <NavDropdown.Item onClick={() => setCategoryFilter("Choose Category")}>Choose Category</NavDropdown.Item>    
+                                {
+                                    geners.map(gener => 
+                                        <NavDropdown.Item onClick={() => setCategoryFilter(gener.genreName)} key={gener._id}>{gener.genreName}</NavDropdown.Item>    
+                                    )
+                                }
                             
                             </NavDropdown>
 
                             <NavDropdown
                                 id="nav-dropdown-dark-example"
-                                title={dropdownPriceRange}
-                                menuVariant="dark"
+                                title={priceFilter}
+                                menuVariant="light"
                                 style={{ border: "1px solid grey" }}
                             >
-                                {/* We need to add some categories */}
+                                <NavDropdown.Item>Low to High</NavDropdown.Item>    
+                                <NavDropdown.Item>High To Low</NavDropdown.Item>    
                             
                             </NavDropdown>
                         </div>

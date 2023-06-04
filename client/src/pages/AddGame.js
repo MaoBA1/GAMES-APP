@@ -1,33 +1,61 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import './../AddGame.css';
-import { Button, Col, Form, Image, Row } from 'react-bootstrap';
+import { Button, Col, Form, Image, Row, Spinner } from 'react-bootstrap';
 import { IoMdAddCircle } from 'react-icons/io';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { ref, deleteObject, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from '../firebase';
+import generateUniqueFileName from '../GenrateUniqueName';
 
 const baseURL = "http://localhost:3001/api";
 
-const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) => {
+const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setCanIPublish }) => {
+    const [ isInProcess, setIsInProcess ] = useState(false);
+    
+    const deleteImageFromStorage = () => {
+        const imageRef = ref(storage, "Games-Images/" + image.name);
+        deleteObject(imageRef)
+        .then(() => {
+            setImage(array.filter(image => image.downloadUrl !== image.downloadUrl));
+        })
+        .catch(error => {
+            console.log(error.message);
+        })
+    }
+
+
+
 
     const onImageSelected = (e) => {
         if (e.target.files.length) {
-            const file = e.target.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', "yva08bqk");
-            axios.post(`https://api.cloudinary.com/v1_1/${"gameapps"}/image/upload`, formData)
-            .then(async results => {
-                let value = await results.data.secure_url;
-                setImage([ ...array, value ])
-                console.log(array);
-                
-            })
-            .catch(error => {
-                toast.error(error.message)
-            })
+            const fileObj = e.target.files && e.target.files[0];
+            const imageName = generateUniqueFileName();
+            const imageRef = ref(storage, "Games-Images/" + imageName);
+            const uploadTask = uploadBytesResumable(imageRef, fileObj);
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    setIsInProcess(true);
+                    setCanIPublish(false)
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                },
+                (error) => {
+                    console.log(error.message);
+                }, 
+                () => {
+                    
+                    setIsInProcess(false);
+                    setCanIPublish(true);
+                    return getDownloadURL(uploadTask.snapshot.ref)
+                    .then(downloadUrl => {
+                        setImage([...array, {name: imageName, downloadUrl}]);
+                    })
+                }
+            )
         }
     }
 
@@ -41,7 +69,7 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) =>
         (
             <div style={{ position:"relative" }}>
             <Image 
-                src={image}
+                src={image.downloadUrl}
                 style={{ 
                     width: image === array[0] ? "320px" : "150px",
                     height: image === array[0] ? "320px" : "150px",
@@ -58,7 +86,7 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) =>
                 }}
                 color='#FFFFFF'
                 size={"25px"}
-                onClick={() => setImage(array.filter(url => url !== image))}
+                onClick={deleteImageFromStorage}
             />
             </div>
         )
@@ -76,13 +104,24 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array }) =>
                 onClick={handelImageSelection}
             >
                 
-                <div>
-                    <IoMdAddCircle
-                        style={{ marginRight:"5px" }}
-                        size={"30px"}
-                    />
-                    <label>ADD PHOTO</label>
-                </div>
+                {
+                    isInProcess ?
+                    (
+                        <div>
+                            <Spinner animation='border' role='status'/>
+                        </div>
+                    )
+                    :
+                    (
+                        <div>
+                            <IoMdAddCircle
+                                style={{ marginRight:"5px" }}
+                                size={"30px"}
+                            />
+                            <label>ADD PHOTO</label>
+                        </div>
+                    )
+                }
                 <input
                     type='file'
                     style={{ display: "none" }}
@@ -104,9 +143,11 @@ function AddGame({ }) {
     const [ gameGenre, setGameGenre ] = useState("");
     const [ gamePrice, setGamePrice ] = useState("$");
     const [ gameDescription, setGameDescription ] = useState("");
-    
+    const [ canIPublish, setCanIPublish ] = useState(true);
 
-    const publishGame = () => {
+    const publishGame = (event) => {
+        event.preventDefault();
+        console.log("test");
         if(gamePrice === "$") {
             return;
         }
@@ -115,7 +156,7 @@ function AddGame({ }) {
         }
         const game = {
             gameName,
-            gamePrice,
+            gamePrice: parseFloat(gamePrice.slice(1, gamePrice.length)),
             gameDescription,
             gameGenre,
             gameImage: gameImages
@@ -123,6 +164,7 @@ function AddGame({ }) {
 
         axios.post(baseURL + "/game/createNewGame", { game })
         .then(results => {
+            console.log(results.data);
             const { status, message } = results.data;
 
             if(!status) {
@@ -151,6 +193,7 @@ function AddGame({ }) {
                             setImage={setGameImages}
                             array={gameImages}
                             isEmpty={gameImages.length === 0}
+                            setCanIPublish={setCanIPublish}
                         />
                     )
                     :
@@ -164,6 +207,7 @@ function AddGame({ }) {
                                     image={gameImages[0]}
                                     index={0}
                                     array={gameImages}
+                                    setCanIPublish={setCanIPublish}
                                 />
                             <div style={{
                                 display:"flex",
@@ -181,6 +225,7 @@ function AddGame({ }) {
                                             image={item}
                                             index={index}
                                             array={gameImages}
+                                            setCanIPublish={setCanIPublish}
                                         />
                                     </div>
                                 )
@@ -193,6 +238,7 @@ function AddGame({ }) {
                                     setImage={setGameImages}
                                     array={gameImages}
                                     isEmpty={true}
+                                    setCanIPublish={setCanIPublish}
                                 />
                             }
                             </div>
@@ -277,6 +323,7 @@ function AddGame({ }) {
                             type="submit"
                             style={{ width:"60%", marginBottom:"20px" }}
                             onClick={publishGame}
+                            disabled={!canIPublish}
                         >
                             Publish It!
                         </Button>

@@ -1,8 +1,10 @@
 import express from 'express';
 const router = express.Router();
 import mongoose from 'mongoose';
-import Game from '../models/game';
-import Genre from '../models/genre';
+import Game from '../models/game.js';
+import Genre from '../models/genre.js';
+
+
 
 router.post("/createNewGame", async(req, res) => {
     const { 
@@ -11,9 +13,8 @@ router.post("/createNewGame", async(req, res) => {
         gameDescription,
         gameImage,
         gameGenre    
-    } = req.body;
-    
-    Game.findOne({ gameName })
+    } = req.body.game;
+    Game.findOne({ gameName: gameName })
     .then(game => {
         if(game) {
             return res.status(200).json({
@@ -22,7 +23,7 @@ router.post("/createNewGame", async(req, res) => {
             })
         } else {
             Genre.findOne({ genreName: gameGenre })
-            .then((genre) => {
+            .then(async(genre) => {
                 let genreId;
                 if(!genre) {
                     const new_genre = new Genre({ _id: new mongoose.Types.ObjectId(), genreName: gameGenre })
@@ -41,7 +42,8 @@ router.post("/createNewGame", async(req, res) => {
                 })
 
                 return new_game.save()
-                .then(() => {
+                .then((g) => {
+                    console.log(g);
                     return res.status(200).json({
                         status: true,
                         message: "Success"
@@ -60,11 +62,33 @@ router.post("/createNewGame", async(req, res) => {
 })
 
 router.get("/getAllGames", async(req, res) => {
-    Game.find({ })
-    .then(games => {
+    try {
+        const games = await Game.find().populate('genreId', 'genreName').exec();
+        let formatted_games = games.map(game => {
+          return {
+            ...game.toObject(),
+            gameGenre: game.genreId.genreName
+          };
+        });
         return res.status(200).json({
-            games
+            games: formatted_games
         })
+    } catch (error) {
+        // Handle error
+        console.error(error);
+        throw error;
+    }
+})
+
+router.get("/getAllGeners", async(req, res) => {
+    Genre.find({ })
+    .then(geners => {
+        return res.status(200).json({
+            geners
+        })
+    })
+    .catch(error => {
+        console.log(error);
     })
 })
 

@@ -14,8 +14,8 @@ function GameItem({ game }) {
     
     return (  
         <div style={{
-            width:"350px",
-            height:"450px",
+            width:"400px",
+            height:"500px",
             backgroundColor:"#FFFFFFFF",
             margin:"25px",
             display:"flex",
@@ -25,35 +25,43 @@ function GameItem({ game }) {
             paddingTop:"20px",
             borderRadius:"20px"
         }}>
-            <Image
-                src={gameImage[0].downloadUrl}
-                style={{ width:"80%", height:"50%" }}
-            />
+            <div style={{
+                 display:"flex",
+                 flexDirection:"column",
+                 alignItems:"center",
+                 height:"80%"
+            }}>
+                <Image
+                    src={gameImage[0].downloadUrl}
+                    style={{ width:"80%", height:"50%" }}
+                />
 
-            <h3 style={{
-                textAlign:"center",
-                margin:"10px"
-            }}>
-                {gameName}
-            </h3>
+                <h3 style={{
+                    textAlign:"center",
+                    margin:"10px"
+                }}>
+                    {gameName}
+                </h3>
 
-            <h5 style={{
-                textAlign:"center",
-                margin:"10px"
-            }}>
-                {gameGenre}
-            </h5>
-            <h4 style={{
-                textAlign:"center",
-                margin:"10px",
-                color:"#E3631C"
-            }}>
-                {"$ " + gamePrice}
-            </h4>
+                <h5 style={{
+                    textAlign:"center",
+                    margin:"10px"
+                }}>
+                    {gameGenre}
+                </h5>
+                <h4 style={{
+                    textAlign:"center",
+                    margin:"10px",
+                    color:"#E3631C"
+                }}>
+                    {"$ " + gamePrice}
+                </h4>
+            </div>
 
             <div style={{
                 position:"relative",
-                width:"100%"
+                width:"100%",
+                height:"20%"
             }}>
                 <Button 
                     variant='dark'

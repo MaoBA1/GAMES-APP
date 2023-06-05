@@ -80,6 +80,8 @@ router.get("/getAllGames", async(req, res) => {
     }
 })
 
+
+
 router.get("/getAllGeners", async(req, res) => {
     Genre.find({ })
     .then(geners => {

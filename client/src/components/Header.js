@@ -10,7 +10,9 @@ const Header = ({
     setCategoryFilter,
     setPriceFilter,
     priceFilter,
-    categoryiFilter
+    categoryiFilter,
+    search, 
+    setSearch
 }) => {
     
     return(
@@ -51,6 +53,8 @@ const Header = ({
                             style={{
                                 width:"70%"
                             }}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                         />
                         <div style={{
                             display:"flex",
@@ -79,8 +83,9 @@ const Header = ({
                                 menuVariant="light"
                                 style={{ border: "1px solid grey" }}
                             >
-                                <NavDropdown.Item>Low to High</NavDropdown.Item>    
-                                <NavDropdown.Item>High To Low</NavDropdown.Item>    
+                                <NavDropdown.Item onClick={() => setPriceFilter("Choose Price Range")}>Choose Price Range</NavDropdown.Item>
+                                <NavDropdown.Item onClick={() => setPriceFilter("Low to High")}>Low to High</NavDropdown.Item>    
+                                <NavDropdown.Item onClick={() => setPriceFilter("High To Low")}>High To Low</NavDropdown.Item>    
                             
                             </NavDropdown>
                         </div>

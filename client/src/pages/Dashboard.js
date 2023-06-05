@@ -19,14 +19,22 @@ const Dashboard = props => {
    const [ generes, setGeners ] = useState([]);
    const [ categoryiFilter, setCategoryFilter ] = useState("Choose Category")
    const [ priceFilter, setPriceFilter ] = useState("Choose Price Range");
+   const [ search, setSearch ] = useState("");
 
    const gamesByFilterChoise = () => {
+        let gamesFilterdByPriceRange = priceFilter === "Choose Price Range" ? 
+        allGames 
+        :
+        priceFilter === "Low to High" ?
+        allGames.sort((a,b) => (a.gamePrice - b.gamePrice))
+        :
+        allGames.sort((a,b) => (b.gamePrice - a.gamePrice));
         switch(categoryiFilter) {
             case "Choose Category":
-                return allGames;
+                return gamesFilterdByPriceRange;
 
             default:
-                return allGames.filter(game => game.gameGenre === categoryiFilter);
+                return gamesFilterdByPriceRange.filter(game => game.gameGenre === categoryiFilter);
         }
    }
 
@@ -62,6 +70,8 @@ const Dashboard = props => {
                 setPriceFilter={setPriceFilter}
                 priceFilter={priceFilter}
                 categoryiFilter={categoryiFilter}
+                search={search}
+                setSearch={setSearch}
             />
             <div style={{
                 display:"flex",
@@ -71,7 +81,18 @@ const Dashboard = props => {
                 marginTop:"20px"
             }}>
                 {
+                    search.length === 0 ?
+
                     gamesByFilterChoise().map((item, index) => 
+                        <div key={item._id}>
+                            <GameItem game={item}/>
+                        </div>    
+                    )
+                    :
+                    allGames.filter(game => {
+                        return game.gameName.toLowerCase().includes(search.toLowerCase());
+                    })
+                    .map((item, index) => 
                         <div key={item._id}>
                             <GameItem game={item}/>
                         </div>    

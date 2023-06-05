@@ -17,7 +17,7 @@ const Header = ({
     
     return(
         <>
-        <Navbar variant="dark" bg="light" expand="lg">
+        <Navbar variant="dark" bg="light" expand="lg" >
             <Container fluid>
                 <Navbar.Collapse id="navbar-dark-example">
                     <Navbar.Brand href="/dashboard">

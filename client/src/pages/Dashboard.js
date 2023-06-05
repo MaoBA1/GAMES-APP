@@ -63,7 +63,7 @@ const Dashboard = props => {
 
     return (
         <>
-            <Header 
+        <Header 
                 isItDashBoard={true}
                 geners={generes}
                 setCategoryFilter={setCategoryFilter} 
@@ -72,33 +72,53 @@ const Dashboard = props => {
                 categoryiFilter={categoryiFilter}
                 search={search}
                 setSearch={setSearch}
-            />
+        />
+        <div style={{
+            display:"flex",
+            flexDirection:"row",
+            border:"1px solid red",
+            width: window.innerWidth
+        }}>
             <div style={{
-                display:"flex",
-                flexDirection:"row",
-                flexWrap:"wrap",
-                justifyContent:"center",
-                marginTop:"20px"
+                border:"1px solid",
+                width:"10%"
+            }}/>
+            <div style={{
+                border:"1px solid green",
+                width:"80%"
             }}>
-                {
-                    search.length === 0 ?
+                <div style={{
+                    display:"flex",
+                    flexDirection:"row",
+                    flexWrap:"wrap",
+                    justifyContent:"center",
+                    marginTop:"20px"
+                }}>
+                    {
+                        search.length === 0 ?
 
-                    gamesByFilterChoise().map((item, index) => 
-                        <div key={item._id}>
-                            <GameItem game={item}/>
-                        </div>    
-                    )
-                    :
-                    allGames.filter(game => {
-                        return game.gameName.toLowerCase().includes(search.toLowerCase());
-                    })
-                    .map((item, index) => 
-                        <div key={item._id}>
-                            <GameItem game={item}/>
-                        </div>    
-                    )
-                }
+                        gamesByFilterChoise().map((item, index) => 
+                            <div key={item._id}>
+                                <GameItem game={item}/>
+                            </div>    
+                        )
+                        :
+                        allGames.filter(game => {
+                            return game.gameName.toLowerCase().includes(search.toLowerCase());
+                        })
+                        .map((item, index) => 
+                            <div key={item._id}>
+                                <GameItem game={item}/>
+                            </div>    
+                        )
+                    }
+                </div>
             </div>
+            <div style={{
+                border:"1px solid",
+                width:"10%"
+            }}/>
+        </div>
         </>
     )
 }

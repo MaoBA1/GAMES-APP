@@ -1,64 +1,74 @@
 import React from 'react';
 import { Button, Image } from 'react-bootstrap';
 import { MdArrowForwardIos } from 'react-icons/md';
-
+import '../index.css'
+import { useNavigate } from 'react-router-dom';
 
 function GameItem({ game }) {
     const {
+        _id,
         gameName,
         gamePrice,
         gameDescription,
         gameGenre,
         gameImage
     } = game;
-    
+    const navigate = useNavigate();
     return (  
         <div style={{
-            width:"400px",
-            height:"500px",
-            backgroundColor:"#FFFFFFFF",
-            margin:"25px",
+            margin:"14px",
             display:"flex",
             flexDirection:"column",
             alignItems:"center",
             padding:"10px",
             paddingTop:"20px",
-            borderRadius:"20px"
-        }}>
+            borderRadius:"20px",
+            height:"350px",
+            justifyContent:"center"
+        }} className='game-item-container' onClick={() => navigate("/review-details/" + _id)}>
             <div style={{
-                 display:"flex",
-                 flexDirection:"column",
-                 alignItems:"center",
-                 height:"80%"
+                display:"flex",
+                flexDirection:"column",
+                alignItems:"center",                 
             }}>
                 <Image
                     src={gameImage[0].downloadUrl}
-                    style={{ width:"80%", height:"50%" }}
+                    style={{ width:"450px", objectFit:"contain" }}
                 />
 
-                <h3 style={{
-                    textAlign:"center",
-                    margin:"10px"
+                <div style={{ 
+                    width:"180px",
+                    display:"flex",
+                    flexDirection:"column",
+                    alignItems:"center"
                 }}>
-                    {gameName}
-                </h3>
+                    <label style={{
+                        textAlign:"center",
+                        fontSize:"18px",
+                        fontWeight:"bold"
+                    }}>
+                        {gameName}
+                    </label>
 
-                <h5 style={{
-                    textAlign:"center",
-                    margin:"10px"
-                }}>
-                    {gameGenre}
-                </h5>
-                <h4 style={{
-                    textAlign:"center",
-                    margin:"10px",
-                    color:"#E3631C"
-                }}>
-                    {"$ " + gamePrice}
-                </h4>
+                    <label style={{
+                        textAlign:"center",
+                        fontSize:"14px",
+                        fontWeight:"bold"
+                    }}>
+                        {gameGenre}
+                    </label>
+                    <label style={{
+                        textAlign:"center",
+                        color:"grey",
+                        fontSize:"14px",
+                        fontWeight:"bold"
+                    }}>
+                        {"$ " + gamePrice}
+                    </label>
+                </div>
             </div>
 
-            <div style={{
+            {/* <div style={{
                 position:"relative",
                 width:"100%",
                 height:"20%"
@@ -76,7 +86,7 @@ function GameItem({ game }) {
                 >
                     <MdArrowForwardIos/>
                 </Button>
-            </div>
+            </div> */}
         </div>
     );
 }

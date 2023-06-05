@@ -80,7 +80,25 @@ router.get("/getAllGames", async(req, res) => {
     }
 })
 
-
+router.get("/getGameById/:gameId", async(req, res) => {
+    const { gameId } = req.params;
+    try {
+        const games = await Game.find({ _id: gameId }).populate('genreId', 'genreName').exec();
+        let formatted_games = games.map(game => {
+          return {
+            ...game.toObject(),
+            gameGenre: game.genreId.genreName
+          };
+        });
+        return res.status(200).json({
+            games: formatted_games
+        })
+    } catch (error) {
+        // Handle error
+        console.error(error);
+        throw error;
+    }
+})
 
 router.get("/getAllGeners", async(req, res) => {
     Genre.find({ })

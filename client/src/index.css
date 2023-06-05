@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color:#e9ecf0 !important;
+  max-width: 2000px; 
 }
 
 code {
@@ -15,5 +16,12 @@ code {
 
 table{
   color:#ffffff !important;
+}
+
+.game-item-container{
+  border: 2px dotted grey;
+}
+.game-item-container:hover {
+  border: 2px solid #EE621A;
 }
 

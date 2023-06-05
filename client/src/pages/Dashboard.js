@@ -75,24 +75,18 @@ const Dashboard = props => {
         />
         <div style={{
             display:"flex",
-            flexDirection:"row",
-            border:"1px solid red",
-            width: window.innerWidth
+            flexDirection:"column",
+            alignItems:"center"
         }}>
-            <div style={{
-                border:"1px solid",
-                width:"10%"
-            }}/>
-            <div style={{
-                border:"1px solid green",
-                width:"80%"
-            }}>
+            
+            
                 <div style={{
                     display:"flex",
                     flexDirection:"row",
                     flexWrap:"wrap",
-                    justifyContent:"center",
-                    marginTop:"20px"
+                    justifyContent:"flex-start",
+                    marginTop:"20px",
+                    width:"99%",
                 }}>
                     {
                         search.length === 0 ?
@@ -114,11 +108,6 @@ const Dashboard = props => {
                     }
                 </div>
             </div>
-            <div style={{
-                border:"1px solid",
-                width:"10%"
-            }}/>
-        </div>
         </>
     )
 }

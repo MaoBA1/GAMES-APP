@@ -91,7 +91,7 @@ router.get("/getGameById/:gameId", async(req, res) => {
           };
         });
         return res.status(200).json({
-            games: formatted_games
+            game: formatted_games[0]
         })
     } catch (error) {
         // Handle error

@@ -25,3 +25,26 @@ table{
   border: 2px solid #EE621A;
 }
 
+
+.loading-container {
+  flex:1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+}
+
+.animation {
+  animation-name: animation-div;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes animation-div {
+  0%{width: 0%;}
+  50%{width: 100%;}
+  100%{width: 0%;}
+  
+}
+

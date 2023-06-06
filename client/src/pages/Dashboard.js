@@ -63,7 +63,10 @@ const Dashboard = props => {
 
     return (
         <>
-        <Header 
+        <div style={{
+            display:"grid",
+        }}>
+            <Header 
                 isItDashBoard={true}
                 geners={generes}
                 setCategoryFilter={setCategoryFilter} 
@@ -72,21 +75,15 @@ const Dashboard = props => {
                 categoryiFilter={categoryiFilter}
                 search={search}
                 setSearch={setSearch}
-        />
-        <div style={{
-            display:"flex",
-            flexDirection:"column",
-            alignItems:"center"
-        }}>
-            
+        />  
             
                 <div style={{
-                    display:"flex",
-                    flexDirection:"row",
-                    flexWrap:"wrap",
-                    justifyContent:"flex-start",
+                    display:"grid",
+                    // flexDirection:"row",
+                    // flexWrap:"wrap",
+                    // justifyContent:"flex-start",
+                    gridTemplateColumns:`${100/3}% ${100/3}% ${100/3}%`,
                     marginTop:"20px",
-                    width:"99%",
                 }}>
                     {
                         search.length === 0 ?

@@ -79,9 +79,6 @@ const Dashboard = props => {
             
                 <div style={{
                     display:"grid",
-                    // flexDirection:"row",
-                    // flexWrap:"wrap",
-                    // justifyContent:"flex-start",
                     gridTemplateColumns:`${100/3}% ${100/3}% ${100/3}%`,
                     marginTop:"20px",
                 }}>

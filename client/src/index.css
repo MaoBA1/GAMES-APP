@@ -48,3 +48,17 @@ table{
   
 }
 
+.placholder {
+  animation-name: placholder;
+  animation-duration: 1s;
+  background-color: #7C869B;
+  opacity: 0.8;
+  animation-iteration-count: infinite;
+}
+
+@keyframes placholder {
+  50%{background-color: #6e7583; opacity: 1;}
+  100%{background-color: #7C869B; opacity: 0.8;}
+  
+}
+

@@ -31,10 +31,19 @@ function GameItem({ game }) {
                 flexDirection:"column",
                 alignItems:"center",                 
             }}>
-                <Image
-                    src={gameImage[0].downloadUrl}
-                    style={{ width:"450px", objectFit:"contain" }}
-                />
+                <div style={{ position:"relative", width:"450px", height:"210px" }}>
+                    <div className='placholder' style={{ 
+                        zIndex:-1, 
+                        top:'0',
+                        width:"450px",
+                        height:"210px",
+                        position:"absolute"
+                    }}/>
+                    <Image
+                        src={gameImage[0].downloadUrl}
+                        style={{ width:"450px", objectFit:"contain", zIndex:1 }}
+                    />
+                </div>
 
                 <div style={{ 
                     width:"180px",

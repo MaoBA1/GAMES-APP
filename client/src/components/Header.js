@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Navbar,Container,NavDropdown, Nav, Form } from 'react-bootstrap';
+import { Navbar,Container,NavDropdown, Nav, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { AiOutlineLogin } from 'react-icons/ai';
 
 const Header = ({ 
     isItDashBoard,
@@ -14,7 +14,11 @@ const Header = ({
     search, 
     setSearch
 }) => {
-    
+    const navigate = useNavigate();
+    const logout = () => {
+        localStorage.removeItem("token");
+        navigate('/');
+    }
     return(
         <>
         <Navbar variant="dark" bg="light" expand="lg" >
@@ -33,6 +37,29 @@ const Header = ({
                         <Link style={{ textDecoration:"none", color:"#EE621A" }}  to="/addProduct" relative="path">
                             Add New Product
                         </Link>
+                </Navbar.Collapse>
+                <Navbar.Collapse style={{ 
+                    justifyContent:"flex-end",
+                    display:"flex",
+                    flexDirection:"row" 
+                }}  id="navbar-dark-example">
+                    <Button 
+                        variant="dark"
+                        style={{
+                            width:"120px",
+                            display:"flex",
+                            flexDirection:"row",
+                            alignItems:"center",
+                            justifyContent:"space-evenly"
+                        }}
+                        onClick={logout}
+                    >
+                        <AiOutlineLogin
+                            color="#FFFFFF"
+                            size={"20px"}
+                        />
+                        Log-Out
+                    </Button>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

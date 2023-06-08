@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from 'moment';
 import RowEdit from "../components/RowEdit";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { VscChevronRight } from "react-icons/vsc";
 import axios from 'axios';
 import GameItem from "../components/GameItem";
@@ -20,7 +20,8 @@ const Dashboard = props => {
    const [ categoryiFilter, setCategoryFilter ] = useState("Choose Category")
    const [ priceFilter, setPriceFilter ] = useState("Choose Price Range");
    const [ search, setSearch ] = useState("");
-
+   const navigate = useNavigate();
+   
    const gamesByFilterChoise = () => {
         let gamesFilterdByPriceRange = priceFilter === "Choose Price Range" ? 
         allGames 
@@ -41,6 +42,9 @@ const Dashboard = props => {
    
 
     useEffect(() => {
+        if(!localStorage.getItem("token")){
+            navigate('/');
+        } 
         axios.get(baseURL + "/game/getAllGames")
         .then((results) => {
             console.log(results.data);

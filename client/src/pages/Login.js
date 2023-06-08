@@ -26,11 +26,8 @@ const Login = props => {
 
     useEffect(() => {
         if(localStorage.getItem("token")){
-            // localStorage.removeItem("token")
             navigate('/dashboard')
-        } else {
-            navigate('/')
-        }
+        } 
 
         if (window.performance) {
             if (performance.navigation.type === 1) {
@@ -78,7 +75,7 @@ const Login = props => {
     }
     axios.post(baseURL + '/account/login',{user})
     .then(results => {
-        //toast.success(results.data.message);
+        toast.success(results.data.message);
         console.log(results);
         localStorage.setItem("token", JSON.stringify(results.data.message));
         navigate('/dashboard');

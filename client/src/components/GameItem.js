@@ -41,7 +41,7 @@ function GameItem({ game }) {
                     }}/>
                     <Image
                         src={gameImage[0].downloadUrl}
-                        style={{ width:"450px", objectFit:"contain", zIndex:1 }}
+                        style={{ width:"100%", height:"100%", objectFit:"fill", zIndex:1 }}
                     />
                 </div>
 

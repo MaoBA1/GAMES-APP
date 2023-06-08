@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 import bodyParser from'body-parser';
 import mongoose from 'mongoose';
-import actions from './actions.js';
 import cors from 'cors';
 import accountController from './controllers/account.js';
 import gameController from './controllers/game.js';
@@ -17,7 +16,6 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT;
 
-app.use('/api', actions);
 app.use('/api/account', accountController);
 app.use('/api/game', gameController);
 

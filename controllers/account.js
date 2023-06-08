@@ -5,7 +5,8 @@ import Account from '../models/account.js';
 import bcryptjs from 'bcryptjs'; //Password crypt
 import jwt from 'jsonwebtoken'; //Manage TOKENS
 import Device from '../models/device.js'
-
+import Game from '../models/game.js';
+import auth from '../auth.js';
 
 router.post('/createDevice', async(req,res) => {
     const device = req.body.device;
@@ -209,6 +210,48 @@ router.put("/changePassword", async(req, res) => {
     })
 
 })
+
+router.get("/getAccountCart", auth, async(req, res) => {
+    const { accountId } = req.account;
+    Account.findById(accountId)
+    .then(account => {
+        const cart = account.cart.map((gameId) => {
+            return Game.findById(gameId)
+        })
+        return res.status(200).json({
+            cart: cart
+        })
+    })
+    .catch(error => {
+        console.log(error);
+        return res.status(500).json({
+            error: error.message
+        })
+    })
+})
+
+router.put("/addToCart", auth, async(req, res) => {
+    const { gameId } = req.body;
+    const { accountId } = req.account;
+    Account.findById(accountId)
+    .then(account => {
+        account.cart = [ ...account.cart, gameId ];
+        return account.save()
+        .then(account_updated => {
+            return res.status(200).json({
+                cart: account_updated.cart
+            })
+        })
+    })
+    .catch(error => {
+        console.log(error);
+        return res.status(500).json({
+            error: error.message
+        })
+    })
+})
+
+
 
 function generateRandomIntegerInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

@@ -10,7 +10,10 @@ const accountSchema = new Schema({
     verficationCode: Number,
     isVerified: {type: Boolean, default: false},
     mobile: String,
-    avatar: {type: String, default: "https://cdn-icons-png.flaticon.com/512/5087/5087379.png"}
+    avatar: {type: String, default: "https://cdn-icons-png.flaticon.com/512/5087/5087379.png"},
+    cart: [
+        {type: mongoose.Schema.Types.ObjectId, ref: 'Game'},
+    ]
 })
 
 export default mongoose.model('Account', accountSchema);

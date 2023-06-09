@@ -25,7 +25,7 @@ function GameItem({ game }) {
             borderRadius:"20px",
             height:"350px",
             justifyContent:"center"
-        }} className='game-item-container' onClick={() => navigate("/review-details/" + _id)}>
+        }} className='game-item-container scal-grow-up' onClick={() => navigate("/review-details/" + _id)}>
             <div style={{
                 display:"flex",
                 flexDirection:"column",

@@ -212,11 +212,12 @@ router.put("/changePassword", async(req, res) => {
 })
 
 router.get("/getAccountCart", auth, async(req, res) => {
-    const { accountId } = req.account;
-    Account.findById(accountId)
-    .then(account => {
+    const { _id } = req.account;
+    Account.findById(_id)
+    .then(async account => {
+        let games = await Game.find();
         const cart = account.cart.map((gameId) => {
-            return Game.findById(gameId)
+            return games.filter(game => game._id.toString() === gameId.toString())[0];
         })
         return res.status(200).json({
             cart: cart
@@ -231,7 +232,6 @@ router.get("/getAccountCart", auth, async(req, res) => {
 })
 
 router.put("/addToCart", auth, async(req, res) => {
-    // console.log(req);
     const { gameId } = req.body;
     const { _id } = req.account;
     Account.findById(_id)
@@ -257,7 +257,33 @@ router.put("/addToCart", auth, async(req, res) => {
     })
 })
 
-
+router.get("/removeItemFromCart/:itemId", auth, async(req, res) => {
+    const { _id } = req.account;
+    const itemId = req.params.itemId;
+    console.log(_id);
+    
+    Account.findById(_id)
+    .then(account => {
+        account.cart = account.cart.filter(game => game._id.toString() !== itemId.toString());
+        return account.save()
+        .then(async account_updated => {
+            let games = await Game.find();
+            const cart = account_updated.cart.map((gameId) => {
+                console.log(games.filter(game => game._id.toString() === gameId.toString()));
+                return games.filter(game => game._id.toString() === gameId.toString())[0];
+            })
+            return res.status(200).json({
+                cart: cart
+            })
+        })
+    })
+    .catch(error => {
+        console.log(error);
+        return res.status(500).json({
+            error: error.message
+        })
+    })
+})
 
 function generateRandomIntegerInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

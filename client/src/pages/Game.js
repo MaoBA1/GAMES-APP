@@ -9,10 +9,13 @@ import { MdClose } from 'react-icons/md';
 import { HiShoppingCart } from 'react-icons/hi';
 import '../index.css';
 import serverUrl from "../serverUrl";
+import { useDispatch } from "react-redux";
+import { getUserCartDispatch } from "../store/actions";
 
 const baseURL = serverUrl.baseUrl;
 
 const Game = props => {
+    const dispatch = useDispatch();
     const { gameId } = useParams();
     const [ game, setGame ] = useState(null);
     const [temporaryImageIndex, setTamporaryImageIndex] = useState(null);
@@ -25,7 +28,11 @@ const Game = props => {
     const addToCart = () => {
         axios.put(baseURL + "/account/addToCart", { gameId } , {headers: { 'authorization': 'Bearer ' + JSON.parse(localStorage.getItem("token")) }} )
         .then(results => {
-            console.log(JSON.stringify(results.data.cart));
+            try {
+                dispatch(getUserCartDispatch(results.data.cart));
+            } catch(error) {
+                console.error(error);
+            }
         })
         .catch(error => {
             console.error(error.message);
@@ -35,7 +42,6 @@ const Game = props => {
     useEffect(() => {
         axios.get(baseURL + "/game/getGameById/" + gameId)
         .then(results => {
-            console.log(results.data.game);
             setGame(results.data.game);
         })
         .catch(error => {
@@ -103,7 +109,7 @@ const Game = props => {
                                             height:"100%",
                                             borderRadius:"15px",
                                         }}
-                                        
+                                        className="scal-grow-up"
                                     />  
                                 </div>
                             )
@@ -124,6 +130,7 @@ const Game = props => {
                                 <Image
                                     src={game?.gameImage[constantImageIndex].downloadUrl}
                                     style={{ objectFit:"contain", maxWidth:"100%", maxHeight:"100%", borderRadius:"20px" }}
+                                    
                                 />
                             )
                             :

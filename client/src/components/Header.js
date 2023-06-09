@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar,Container,NavDropdown, Nav, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,9 @@ import '../index.css';
 import { AiFillHome } from 'react-icons/ai';
 import { FaCartPlus } from 'react-icons/fa';
 import { IoMdCart } from 'react-icons/io';
+import { useDispatch, useSelector } from "react-redux";
+import { getUserCartAction } from "../store/actions";
+
 const Header = ({ 
     isItDashBoard,
     geners,
@@ -18,10 +21,24 @@ const Header = ({
     setSearch
 }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const CartSelector = useSelector(state => state.Reducer.Cart);
     const logout = () => {
         localStorage.removeItem("token");
         navigate('/');
     }
+
+    
+    useEffect(() => {
+        if(!CartSelector) {
+            try {
+                dispatch(getUserCartAction());
+            } catch(error) {
+                console.error(error)
+            }
+        }
+    },[])
+
     return(
         <>
         <Navbar variant="dark" bg="light" expand="lg" >
@@ -58,9 +75,27 @@ const Header = ({
                                 size={"20px"}
                                 style={{ marginRight:"5px" }}
                             />
-                            <Link style={{ textDecoration:"none", color:"#EE621A" }}  to="/addProduct" relative="path">
+                            <Link style={{ textDecoration:"none", color:"#EE621A" }}  to="/cart" relative="path">
                                 Your Cart
                             </Link>
+                            {
+                                CartSelector?.length > 0 &&
+                                <div style={{
+                                    borderRadius:"50px",
+                                    backgroundColor:"#EE621A",
+                                    marginLeft:"5px",
+                                    width:"20px",
+                                    height:"20px",
+                                    display:"flex",
+                                    flexDirection:"column",
+                                    alignItems:"center",
+                                    justifyContent:"center"
+                                }}>
+                                    <label style={{ color:"#FFFFFF" }}>
+                                        {CartSelector.length}
+                                    </label>
+                                </div>
+                            }
                         </div>
                 </Navbar.Collapse>
                 <Navbar.Collapse style={{ 

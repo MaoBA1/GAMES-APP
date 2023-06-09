@@ -21,7 +21,7 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setC
         const imageRef = ref(storage, "Games-Images/" + image.name);
         deleteObject(imageRef)
         .then(() => {
-            setImage(array.filter(image => image.downloadUrl !== image.downloadUrl));
+            setImage(array.filter(i => i.downloadUrl !== image.downloadUrl));
         })
         .catch(error => {
             console.log(error.message);
@@ -137,7 +137,7 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setC
 
 
 
-function AddGame({ }) {
+function AddGame() {
     const navigate = useNavigate();
     const [ gameImages, setGameImages ] = useState([]);
     const [ gameName, setGameName ] = useState("");

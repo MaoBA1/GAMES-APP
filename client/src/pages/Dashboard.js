@@ -1,22 +1,17 @@
 import React, {useState,useEffect} from "react";
-import { Button, Container, Row, Col, Form, Card, Table, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from '../components/Header';
-import { FcPlus, FcEditImage } from "react-icons/fc";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import moment from 'moment';
-import RowEdit from "../components/RowEdit";
-import { NavLink, useNavigate } from 'react-router-dom';
-import { VscChevronRight } from "react-icons/vsc";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import GameItem from "../components/GameItem";
 import serverUrl from "../serverUrl";
 
+
 const baseURL = serverUrl.baseUrl;
 
 const Dashboard = props => {
-   const [ allGames, setAllGames ] = useState([]);
+    const [ allGames, setAllGames ] = useState([]);
    const [ generes, setGeners ] = useState([]);
    const [ categoryiFilter, setCategoryFilter ] = useState("Choose Category")
    const [ priceFilter, setPriceFilter ] = useState("Choose Price Range");
@@ -64,7 +59,7 @@ const Dashboard = props => {
         .catch(error => {
             console.log(error.message);
         })
-    },[])
+    },[navigate])
 
     return (
         <>

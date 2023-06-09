@@ -14,7 +14,6 @@ export default (request, response, next) => {
         jwt.verify(brearToken, process.env.JWT_KEY, (err, authData) => {
             if(err) {
                 // if we get an error we return status code 403
-                console.log(err);
                 return response.status(403);
             } else {
                 // else we add to the front request that we got two more atributes
@@ -23,6 +22,7 @@ export default (request, response, next) => {
                 //console.log("authData:" + JSON.stringify(authData));
                 Account.findById(authData.dataTotoken._id)
                 .then(account => {
+                    console.log(account);
                     request.token = brearToken;
                     request.account = account;
                     // after we do all this we go back to the function that called this method

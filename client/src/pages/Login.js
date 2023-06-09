@@ -5,10 +5,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import serverUrl from "../serverUrl";
 
 const Login = props => {
 
-    const baseURL = "http://localhost:3001/api";
+    const baseURL = serverUrl.baseUrl;
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");

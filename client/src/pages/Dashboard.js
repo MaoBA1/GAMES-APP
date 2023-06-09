@@ -11,8 +11,9 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { VscChevronRight } from "react-icons/vsc";
 import axios from 'axios';
 import GameItem from "../components/GameItem";
+import serverUrl from "../serverUrl";
 
-const baseURL = "http://localhost:3001/api";
+const baseURL = serverUrl.baseUrl;
 
 const Dashboard = props => {
    const [ allGames, setAllGames ] = useState([]);

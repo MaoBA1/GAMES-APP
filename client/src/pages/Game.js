@@ -8,8 +8,9 @@ import { BsCheck } from 'react-icons/bs';
 import { MdClose } from 'react-icons/md';
 import { HiShoppingCart } from 'react-icons/hi';
 import '../index.css';
+import serverUrl from "../serverUrl";
 
-const baseURL = "http://localhost:3001/api";
+const baseURL = serverUrl.baseUrl;
 
 const Game = props => {
     const { gameId } = useParams();

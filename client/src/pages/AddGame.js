@@ -10,8 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import { ref, deleteObject, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase';
 import generateUniqueFileName from '../GenrateUniqueName';
+import serverUrl from '../serverUrl';
 
-const baseURL = "http://localhost:3001/api";
+const baseURL = serverUrl.baseUrl;
 
 const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setCanIPublish }) => {
     const [ isInProcess, setIsInProcess ] = useState(false);

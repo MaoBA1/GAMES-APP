@@ -3,7 +3,10 @@ import { Navbar,Container,NavDropdown, Nav, Form, Button } from 'react-bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineLogin } from 'react-icons/ai';
-
+import '../index.css';
+import { AiFillHome } from 'react-icons/ai';
+import { FaCartPlus } from 'react-icons/fa';
+import { IoMdCart } from 'react-icons/io';
 const Header = ({ 
     isItDashBoard,
     geners,
@@ -27,16 +30,38 @@ const Header = ({
                     <Navbar.Brand href="/dashboard">
                         <img src="../../logo.png" style={{width:140}} />
                     </Navbar.Brand>
-                        {
-                            !isItDashBoard &&
+                        <div className="header-buttons">
+                            <AiFillHome
+                                color="#EE621A"
+                                size={"20px"}
+                                style={{ marginRight:"5px" }}
+                            />
                             <Link style={{ textDecoration:"none", color: "#EE621A", }}  to="/dashboard" relative="path">
                                 Home
                             </Link>
-                        }
+                        </div>
                         <div style={{ width:"10px" }} />
-                        <Link style={{ textDecoration:"none", color:"#EE621A" }}  to="/addProduct" relative="path">
-                            Add New Product
-                        </Link>
+                        <div className="header-buttons">
+                            <FaCartPlus
+                                color="#EE621A"
+                                size={"20px"}
+                                style={{ marginRight:"5px" }}
+                            />
+                            <Link style={{ textDecoration:"none", color:"#EE621A" }}  to="/addProduct" relative="path">
+                                Add New Product
+                            </Link>
+                        </div>
+                        <div style={{ width:"10px" }} />
+                        <div className="header-buttons">
+                            <IoMdCart
+                                color="#EE621A"
+                                size={"20px"}
+                                style={{ marginRight:"5px" }}
+                            />
+                            <Link style={{ textDecoration:"none", color:"#EE621A" }}  to="/addProduct" relative="path">
+                                Your Cart
+                            </Link>
+                        </div>
                 </Navbar.Collapse>
                 <Navbar.Collapse style={{ 
                     justifyContent:"flex-end",

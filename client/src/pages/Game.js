@@ -20,12 +20,11 @@ const Game = props => {
     const gamePrice = game?.gamePrice;
     const gameDescription = game?.gameDescription;
     
-
-
+    
     const addToCart = () => {
-        axios.put(baseURL + "/account/addToCart", { gameId } , {headers: { 'authorization': 'Bearer ' + localStorage.getItem("token") }} )
+        axios.put(baseURL + "/account/addToCart", { gameId } , {headers: { 'authorization': 'Bearer ' + JSON.parse(localStorage.getItem("token")) }} )
         .then(results => {
-            console.log(results.data);
+            console.log(JSON.stringify(results.data.cart));
         })
         .catch(error => {
             console.error(error.message);

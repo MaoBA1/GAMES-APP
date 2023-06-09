@@ -4,7 +4,6 @@ import Account from './models/account.js';
 
 export default (request, response, next) => {
     const brearHeader = request.headers['authorization'];
-    console.log(request.headers);
     // We extract the authorization attribute from the frontend request 
     // This atribute hold a string with the word Bearer and the token of the user    
     if(brearHeader){
@@ -22,7 +21,7 @@ export default (request, response, next) => {
                 // 1. the token
                 // 2. the object with the decrypted user details
                 //console.log("authData:" + JSON.stringify(authData));
-                Account.findById(authData._id)
+                Account.findById(authData.dataTotoken._id)
                 .then(account => {
                     request.token = brearToken;
                     request.account = account;

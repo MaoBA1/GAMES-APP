@@ -231,15 +231,21 @@ router.get("/getAccountCart", auth, async(req, res) => {
 })
 
 router.put("/addToCart", auth, async(req, res) => {
+    // console.log(req);
     const { gameId } = req.body;
-    const { accountId } = req.account;
-    Account.findById(accountId)
+    const { _id } = req.account;
+    Account.findById(_id)
     .then(account => {
         account.cart = [ ...account.cart, gameId ];
         return account.save()
-        .then(account_updated => {
+        .then(async account_updated => {
+            let games = await Game.find();
+            const cart = account_updated.cart.map((gameId) => {
+                console.log(games.filter(game => game._id.toString() === gameId.toString()));
+                return games.filter(game => game._id.toString() === gameId.toString())[0];
+            })
             return res.status(200).json({
-                cart: account_updated.cart
+                cart: cart
             })
         })
     })

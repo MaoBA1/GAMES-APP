@@ -16,6 +16,7 @@ import AddGame from "./pages/AddGame";
 
 
 import reducers from './store/reducers';
+import EditGame from './pages/EditGame';
 
 const RootReducer = combineReducers({
   Reducer: reducers
@@ -33,6 +34,7 @@ function App() {
             <Route path="/" element={<Login/>} />
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/addProduct" element={<AddGame/>} />
+            <Route path="/editGame/:gameId" element={<EditGame/>} />
             <Route path="/review-details/:gameId" element={<Game/>} />
             <Route path="/cart" element={<Cart/>} />
           </Routes>

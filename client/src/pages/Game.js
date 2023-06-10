@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import ScreenActivityIndicator from "../components/ScreenActivityIndicator";
 import { Image } from "react-bootstrap";
@@ -11,10 +11,11 @@ import '../index.css';
 import serverUrl from "../serverUrl";
 import { useDispatch } from "react-redux";
 import { getUserCartDispatch } from "../store/actions";
-
+import { FaEdit } from 'react-icons/fa';
 const baseURL = serverUrl.baseUrl;
 
 const Game = props => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { gameId } = useParams();
     const [ game, setGame ] = useState(null);
@@ -58,7 +59,42 @@ const Game = props => {
             <Header/>
             <div style={{
                 display:"grid",
+                position:"relative"
             }}>
+                <div style={{
+                    position:"absolute",
+                    top:10,
+                    left:20,
+                    display:"flex",
+                    flexDirection:"row"
+                }}>
+                    <div 
+                        style={{ 
+                            display:"flex",
+                            flexDirection:"row",
+                            backgroundColor: "#424649",
+                            justifyContent:"space-evenly",
+                            alignItems:"center",
+                            width:"140px",
+                            padding:"10px",
+                            borderRadius:"50px",
+                            margin:"5px",
+                            opacity: isAvailable ? 1 : 0.5,
+                            cursor: "pointer"
+                        }} 
+                        onClick={() => navigate(`/editGame/${gameId}`)}
+                    >
+                        <FaEdit
+                            color="#FFFFFF"
+                            size={"25px"}
+                        />
+                        <label style={{
+                            color:"#FFFFFF"
+                        }}>
+                            Edit Game
+                        </label>
+                    </div>
+                </div>
                 <h1 style={{
                     margin:"0 auto",
                     color:"#EE621A",

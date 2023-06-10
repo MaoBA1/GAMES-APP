@@ -36,3 +36,16 @@ export const removeFromCartAction = (itemId) => {
         })
     }
 }
+
+export const removeAllFromCartAction = (itemId) => {
+    return dispatch => {
+        axios.get(`${serverUrl.baseUrl}/account/removeAllCart` , {headers: { 'authorization': 'Bearer ' + JSON.parse(localStorage.getItem("token")) }})
+        .then(results => {
+            console.log(results.data.cart);
+            dispatch(getUserCartDispatch(results.data.cart));
+        })
+        .catch(() => {
+            throw new Error("Something went wrong");
+        })
+    }
+}

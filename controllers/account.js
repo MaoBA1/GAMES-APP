@@ -260,8 +260,6 @@ router.put("/addToCart", auth, async(req, res) => {
 router.get("/removeItemFromCart/:itemId", auth, async(req, res) => {
     const { _id } = req.account;
     const itemId = req.params.itemId;
-    console.log(_id);
-    
     Account.findById(_id)
     .then(account => {
         account.cart = account.cart.filter(game => game._id.toString() !== itemId.toString());
@@ -274,6 +272,26 @@ router.get("/removeItemFromCart/:itemId", auth, async(req, res) => {
             })
             return res.status(200).json({
                 cart: cart
+            })
+        })
+    })
+    .catch(error => {
+        console.log(error);
+        return res.status(500).json({
+            error: error.message
+        })
+    })
+})
+
+router.get("/removeAllCart", auth, async(req, res) => {
+    const { _id } = req.account;
+    Account.findById(_id)
+    .then(account => {
+        account.cart = [];
+        return account.save()
+        .then((account_updated) => {
+            return res.status(200).json({
+                cart: account_updated.cart
             })
         })
     })

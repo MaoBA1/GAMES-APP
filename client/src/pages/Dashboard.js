@@ -75,7 +75,7 @@ const Dashboard = props => {
                 categoryiFilter={categoryiFilter}
                 search={search}
                 setSearch={setSearch}
-        />  
+            />  
             
                 <div style={{
                     display:"grid",

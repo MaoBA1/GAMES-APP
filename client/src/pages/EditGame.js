@@ -194,6 +194,21 @@ function EditGame() {
         })
     }
 
+    const deleteGame = () => {
+        axios.delete(baseURL + "/game/deleteGameById/" + gameId)
+        .then(results => {
+            if(results.data.status) {
+                setGameImages(imagesToRemove);
+                deleteImageFromStorage();
+                toast.success(`${gameName} was deleted succsesfuly`);
+                navigate("/dashboard");
+            }
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+
     useEffect(() => {
         axios.get(baseURL + "/game/getGameById/" + gameId)
         .then(results => {
@@ -216,8 +231,8 @@ function EditGame() {
 
     return (  
         <div>
-            <Header/>
             <ToastContainer/>
+            <Header/>
             <div className='image-placeholder-background'>
                 {
                     gameImages.length === 0 ?
@@ -351,25 +366,36 @@ function EditGame() {
                             />
                         </Form.Group>
                     </Row>
-                    <Row 
-                        style={{ 
-                            display:"flex",
-                            flexDirection:"column",
-                            alignItems:"center",
-                            marginTop:"20px"
-                        }}>
+                </Form>
+                    <div style={{ 
+                        display:"flex",
+                        flexDirection:"column",
+                        alignItems:"center",
+                        margin:"40px",
+                        width:"700px"
+                    }}>
                         <Button 
                             size='lg'
                             variant='dark'
                             type="submit"
-                            style={{ width:"60%", marginBottom:"20px" }}
+                            style={{ width:"60%", margin:"10px" }}
                             onClick={publishGame}
                             disabled={!canIPublish}
                         >
                             Revice It!
                         </Button>
-                    </Row>
-                </Form>
+
+                        <Button 
+                            size='lg'
+                            variant='danger'
+                            type="submit"
+                            style={{ width:"60%", margin:"10px" }}
+                            onClick={deleteGame}
+                            disabled={!canIPublish}
+                        >
+                            Remove This Game
+                        </Button>
+                    </div> 
             </div>
         </div>
     );

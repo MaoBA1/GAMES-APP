@@ -150,4 +150,17 @@ router.put("/editGame", async(req,res) => {
     })
 })
 
+router.delete("/deleteGameById/:gameId", async(req, res) => {
+    const gameId = req.params.gameId;
+    Game.findByIdAndDelete(gameId)
+    .then(() => {
+        return res.status(200).json({
+            status: true
+        })
+    })
+    .catch(error => {
+        console.log(error.message);
+    })
+})
+
 export default router;

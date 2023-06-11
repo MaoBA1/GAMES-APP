@@ -24,7 +24,6 @@ const Login = props => {
 
     const navigate = useNavigate();
 
-
     useEffect(() => {
         if(localStorage.getItem("token")){
             navigate('/dashboard')

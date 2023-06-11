@@ -14,15 +14,15 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(bodyParser.json());
 
-const port = process.env.PORT;
+const port = 3001;
 
 app.use('/api/account', accountController);
 app.use('/api/game', gameController);
 
 mongoose.connect(process.env.MONGO_URL)
 .then(results => {
-    app.listen(port || 3001, () => {
-        console.log("SERVER IS RUNNING....");
+    app.listen(port, () => {
+        console.log(`SERVER IS RUNNING ON PORT${port}....`);
     })
 })
 .catch(error => {

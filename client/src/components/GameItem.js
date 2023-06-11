@@ -72,30 +72,10 @@ function GameItem({ game }) {
                         fontSize:"14px",
                         fontWeight:"bold"
                     }}>
-                        {"$ " + gamePrice}
+                        {"$ " + gamePrice.toFixed(2)}
                     </label>
                 </div>
             </div>
-
-            {/* <div style={{
-                position:"relative",
-                width:"100%",
-                height:"20%"
-            }}>
-                <Button 
-                    variant='dark'
-                    style={{ 
-                        borderRadius:"50px",
-                        height:"40px",
-                        width:"40px",
-                        position:"absolute",
-                        right:10,
-                        top:5
-                    }}
-                >
-                    <MdArrowForwardIos/>
-                </Button>
-            </div> */}
         </div>
     );
 }

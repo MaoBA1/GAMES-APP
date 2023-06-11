@@ -112,5 +112,42 @@ router.get("/getAllGeners", async(req, res) => {
     })
 })
 
+router.put("/editGame", async(req,res) => {
+    const { 
+        gameId,
+        gameName,
+        gamePrice,
+        gameDescription,
+        gameImage,
+        gameGenre    
+    } = req.body.game;
+    Game.findById(gameId)
+    .then(game => {
+        game.gameName = gameName;
+        game.gamePrice = gamePrice;
+        game.gameDescription = gameDescription;
+        game.gameImage = gameImage;
+        Genre.findOne({ genreName: gameGenre })
+        .then(gener => {
+            if(gener) {
+                game.genreId = gener._id;
+            } else {
+                const new_genre = new Genre({ _id: new mongoose.Types.ObjectId(), genreName: gameGenre })
+                new_genre.save();
+                game.genreId = new_genre._id;
+            }
+            return game.save()
+            .then(() => {
+                return res.status(200).json({
+                    status: true,
+                    message: `${gameName} was updated succsesfuly`
+                })
+            })
+        })
+    })
+    .catch(error => {
+        console.log(error.message);
+    })
+})
 
 export default router;

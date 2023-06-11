@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import './../AddGame.css';
 import { Button, Col, Form, Image, Row, Spinner } from 'react-bootstrap';
 import { IoMdAddCircle } from 'react-icons/io';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -15,22 +15,13 @@ import ScreenActivityIndicator from '../components/ScreenActivityIndicator';
 
 const baseURL = serverUrl.baseUrl;
 
-const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setCanIPublish }) => {
+const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setCanIPublish, imagesToRemove, setImagesToRemove }) => {
     const [ isInProcess, setIsInProcess ] = useState(false);
-    
-    const deleteImageFromStorage = () => {
-        const imageRef = ref(storage, "Games-Images/" + image.name);
-        deleteObject(imageRef)
-        .then(() => {
-            setImage(array.filter(i => i.downloadUrl !== image.downloadUrl));
-        })
-        .catch(error => {
-            console.log(error.message);
-        })
-    }
 
-
-
+    const deleteImageFromArray = () => {
+        setImagesToRemove([ ...imagesToRemove, image ])
+        setImage(array.filter(i => i.downloadUrl !== image.downloadUrl));
+    } 
 
     const onImageSelected = (e) => {
         if (e.target.files.length) {
@@ -39,7 +30,7 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setC
             const imageRef = ref(storage, "Games-Images/" + imageName);
             const uploadTask = uploadBytesResumable(imageRef, fileObj);
             uploadTask.on('state_changed', 
-                (snapshot) => {
+            (snapshot) => {
                     setIsInProcess(true);
                     setCanIPublish(false)
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -88,7 +79,7 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setC
                 }}
                 color='#FFFFFF'
                 size={"25px"}
-                onClick={deleteImageFromStorage}
+                onClick={deleteImageFromArray}
             />
             </div>
         )
@@ -132,8 +123,8 @@ const ImagePlaceHolder = ({ isEmpty, width, height, setImage, image, array, setC
                 />
             </button>
             
-        )
-    )
+            )
+            )
 }
 
 
@@ -143,11 +134,26 @@ function EditGame() {
     const { gameId } = useParams();
     const [ game, setGame ] = useState(null);
     const [ gameImages, setGameImages ] = useState([]);
+    const [ imagesToRemove, setImagesToRemove ] = useState([]);
     const [ gameName, setGameName ] = useState("");
     const [ gameGenre, setGameGenre ] = useState("");
     const [ gamePrice, setGamePrice ] = useState("$");
     const [ gameDescription, setGameDescription ] = useState("");
     const [ canIPublish, setCanIPublish ] = useState(true);
+    
+
+    const deleteImageFromStorage = () => {
+        imagesToRemove.forEach(image => {
+            const imageRef = ref(storage, "Games-Images/" + image.name);
+            deleteObject(imageRef)
+            .then(() => {
+                console.log("image removed from storage");
+            })
+            .catch(error => {
+                console.log(error.message);
+            })
+        })
+    }
 
     const publishGame = (event) => {
         event.preventDefault();
@@ -158,7 +164,12 @@ function EditGame() {
         if(gameImages.length === 0) {
             return toast.error("You have to provide atleast one image to publish your game")
         }
+
+        if(imagesToRemove.length > 0) {
+            deleteImageFromStorage();
+        }
         const game = {
+            gameId,
             gameName,
             gamePrice: parseFloat(gamePrice.slice(1, gamePrice.length)),
             gameDescription,
@@ -166,7 +177,7 @@ function EditGame() {
             gameImage: gameImages
         }
 
-        axios.post(baseURL + "/game/createNewGame", { game })
+        axios.put(baseURL + "/game/editGame", { game })
         .then(results => {
             console.log(results.data);
             const { status, message } = results.data;
@@ -192,7 +203,7 @@ function EditGame() {
             setGameDescription(game.gameDescription);
             setGameGenre(game.gameGenre);
             setGameName(game.gameName);
-            setGamePrice(game.gamePrice);
+            setGamePrice(gamePrice + game.gamePrice.toString());
         })
         .catch(error => {
             console.error(error.message)
@@ -206,7 +217,7 @@ function EditGame() {
     return (  
         <div>
             <Header/>
-            
+            <ToastContainer/>
             <div className='image-placeholder-background'>
                 {
                     gameImages.length === 0 ?
@@ -232,6 +243,8 @@ function EditGame() {
                                     index={0}
                                     array={gameImages}
                                     setCanIPublish={setCanIPublish}
+                                    setImagesToRemove={setImagesToRemove}
+                                    imagesToRemove={imagesToRemove}
                                 />
                             <div style={{
                                 display:"flex",
@@ -250,6 +263,8 @@ function EditGame() {
                                             index={index}
                                             array={gameImages}
                                             setCanIPublish={setCanIPublish}
+                                            setImagesToRemove={setImagesToRemove}
+                                            imagesToRemove={imagesToRemove}
                                         />
                                     </div>
                                 )
@@ -263,6 +278,8 @@ function EditGame() {
                                     array={gameImages}
                                     isEmpty={true}
                                     setCanIPublish={setCanIPublish}
+                                    setImagesToRemove={setImagesToRemove}
+                                    imagesToRemove={imagesToRemove}
                                 />
                             }
                             </div>

@@ -24,6 +24,7 @@ const Game = props => {
     const isAvailable = game?.isAvailable;
     const gamePrice = game?.gamePrice;
     const gameDescription = game?.gameDescription;
+    const gameGenre = game?.gameGenre
     
     
     const addToCart = () => {
@@ -99,10 +100,15 @@ const Game = props => {
                     margin:"0 auto",
                     color:"#EE621A",
                     marginTop:"20px",
-                    marginBottom:"20px"
                 }}>
                     {game?.gameName}
                 </h1>
+                <h3 style={{
+                    margin:"0 auto",
+                    marginBottom:"20px"
+                }}>
+                    {gameGenre}
+                </h3>
                 <div style={{
                     marginTop:"20px",
                     margin:"0 auto",

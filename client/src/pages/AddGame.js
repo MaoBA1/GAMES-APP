@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import './../AddGame.css';
 import { Button, Col, Form, Image, Row, Spinner } from 'react-bootstrap';
 import { IoMdAddCircle } from 'react-icons/io';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
@@ -183,7 +183,7 @@ function AddGame() {
     return (  
         <div>
             <Header/>
-            
+            <ToastContainer/>
             <div className='image-placeholder-background'>
                 {
                     gameImages.length === 0 ?

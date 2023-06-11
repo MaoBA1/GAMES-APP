@@ -21,7 +21,7 @@ app.use('/api/game', gameController);
 
 mongoose.connect(process.env.MONGO_URL)
 .then(results => {
-    app.listen(port, () => {
+    app.listen(port || 3001, () => {
         console.log(`Server is running via port ${port}`);
     })
 })
